@@ -159,11 +159,18 @@
     let productos = [];
 
     fetch(RAW_URL)
-      .then(res => res.json())
+      .then(res => {
+        if (!res.ok) throw new Error('Error al cargar productos');
+        return res.json();
+      })
       .then(data => {
         productos = data;
         renderCategories();
         renderProducts('Todos');
+      })
+      .catch(err => {
+        console.error('Error:', err);
+        document.getElementById('product-list').innerHTML = '<p style="color:red; text-align:center;">Error al cargar la carta. Por favor intente más tarde.</p>';
       });
 
     function renderCategories() {
@@ -195,7 +202,7 @@
         const item = document.createElement('div');
         item.className = 'item';
         item.innerHTML = `
-          <img src="${p.imagen}" alt="${p.nombre}">
+          <img src="${p.imagen}" alt="${p.nombre}" onerror="this.src='https://via.placeholder.com/150'">
           <h3>${p.nombre}</h3>
           <p>${p.descripcion}</p>
           <span class="price">$${p.precio}</span>
@@ -221,16 +228,16 @@
       cont.innerHTML = '';
 
       const filtrados = productos.filter(p =>
-        p.nombre.toLowerCase().includes(q) ||
-        p.descripcion.toLowerCase().includes(q) ||
-        p.categoria.toLowerCase().includes(q)
+        (p.nombre || '').toLowerCase().includes(q) ||
+        (p.descripcion || '').toLowerCase().includes(q) ||
+        (p.categoria || '').toLowerCase().includes(q)
       );
 
       filtrados.forEach(p => {
         const item = document.createElement('div');
         item.className = 'item';
         item.innerHTML = `
-          <img src="${p.imagen}" alt="${p.nombre}">
+          <img src="${p.imagen}" alt="${p.nombre}" onerror="this.src='https://via.placeholder.com/150'">
           <h3>${p.nombre}</h3>
           <p>${p.descripcion}</p>
           <span class="price">$${p.precio}</span>
