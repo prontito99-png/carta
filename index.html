@@ -10,7 +10,272 @@
       font-family: 'Segoe UI', sans-serif;
       margin: 0;
       background: url("img/fondo8.png") repeat-y center top fixed;
+      background-size: cover;<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Carta - prontito</title>
+
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      margin: 0;
+      background: url("img/fondo8.png") repeat-y center top fixed;
       background-size: cover;
+      color: #fda40c;
+      min-height: 100vh;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      background: rgba(255, 255, 255, 0.4);
+      z-index: -1;
+    }
+
+    header {
+      background: #fff;
+    }
+
+    .banner-img {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+
+    .banner {
+      text-align: center;
+      padding: 10px;
+      font-size: 1.5rem;
+      font-weight: bold;
+      background: rgba(255,255,255,0.85);
+      border-radius: 8px;
+      margin: 15px auto;
+      width: fit-content;
+      color: #000;
+    }
+
+    .search-container {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      padding: 10px;
+      flex-wrap: wrap;
+    }
+
+    #search {
+      width: 60%;
+      padding: 8px;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+      font-size: 1rem;
+    }
+
+    #btnBuscar {
+      background: #8c6954;
+      color: white;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+
+    .categories {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 10px;
+      padding: 10px;
+    }
+
+    .categories button {
+      padding: 10px 20px;
+      background-color: #fda40c;
+      color: #000;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      font-size: 1rem;
+    }
+
+    .item-list {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 15px;
+      padding: 20px;
+    }
+
+    .item {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 12px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.15);
+      overflow: hidden;
+      transition: transform 0.2s ease;
+    }
+
+    .item:hover {
+      transform: scale(1.02);
+    }
+
+    .item img {
+      width: 100%;
+      aspect-ratio: 1 / 1;
+      object-fit: cover;
+    }
+
+    .item h3,
+    .item p,
+    .item .price {
+      margin: 10px;
+      color: #000;
+    }
+
+    .price {
+      font-weight: bold;
+    }
+
+    @media (max-width: 600px) {
+      #search {
+        width: 75%;
+      }
+
+      .item-list {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <header>
+    <img src="prontito.jpeg" alt="prontito" class="banner-img"/>
+  </header>
+
+  <div class="banner">¡Bienvenidos a prontito!</div>
+
+  <div class="search-container">
+    <input type="text" id="search" placeholder="Buscar producto..." />
+    <button id="btnBuscar">Buscar</button>
+  </div>
+
+  <div class="categories" id="category-buttons"></div>
+  <div class="item-list" id="product-list"></div>
+
+  <script>
+    let productos = [];
+
+    // Rutas de intento para cargar el JSON
+    const urls = [
+      'productos.json',
+      './productos.json',
+      'https://raw.githubusercontent.com/prontito99-png/carta/main/productos.json'
+    ];
+
+    async function cargarProductos() {
+      for (const url of urls) {
+        try {
+          const res = await fetch(url + '?v=' + new Date().getTime());
+          if (res.ok) {
+            productos = await res.json();
+            renderCategories();
+            renderProducts('Todos');
+            return; // Carga exitosa
+          }
+        } catch (e) {
+          console.warn('Falló intento con URL:', url);
+        }
+      }
+
+      // Si ninguna URL funcionó:
+      document.getElementById('product-list').innerHTML = 
+        '<p style="color:red; text-align:center; width:100%; font-weight:bold;">No se encontró el archivo "productos.json" en tu repositorio GitHub.<br>Verifica que el archivo exista dentro de la carpeta raíz de tu repositorio.</p>';
+    }
+
+    function renderCategories() {
+      const categorias = ['Todos', ...new Set(productos.map(p => p.categoria))];
+      const cont = document.getElementById('category-buttons');
+      cont.innerHTML = '';
+
+      categorias.forEach(cat => {
+        const btn = document.createElement('button');
+        btn.textContent = cat;
+        btn.onclick = () => {
+          renderProducts(cat);
+          document.getElementById('product-list')
+            .scrollIntoView({ behavior: 'smooth' });
+        };
+        cont.appendChild(btn);
+      });
+    }
+
+    function renderProducts(cat) {
+      const cont = document.getElementById('product-list');
+      cont.innerHTML = '';
+
+      const list = cat === 'Todos'
+        ? productos
+        : productos.filter(p => p.categoria === cat);
+
+      list.forEach(p => {
+        const item = document.createElement('div');
+        item.className = 'item';
+        item.innerHTML = `
+          <img src="${p.imagen}" alt="${p.nombre}" onerror="this.src='https://via.placeholder.com/150'">
+          <h3>${p.nombre}</h3>
+          <p>${p.descripcion}</p>
+          <span class="price">$${p.precio}</span>
+        `;
+        cont.appendChild(item);
+      });
+    }
+
+    const searchInput = document.getElementById('search');
+    const btnBuscar = document.getElementById('btnBuscar');
+
+    btnBuscar.addEventListener('click', filterProducts);
+    searchInput.addEventListener('keypress', e => {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        filterProducts();
+      }
+    });
+
+    function filterProducts() {
+      const q = searchInput.value.toLowerCase().trim();
+      const cont = document.getElementById('product-list');
+      cont.innerHTML = '';
+
+      const filtrados = productos.filter(p =>
+        (p.nombre || '').toLowerCase().includes(q) ||
+        (p.descripcion || '').toLowerCase().includes(q) ||
+        (p.categoria || '').toLowerCase().includes(q)
+      );
+
+      filtrados.forEach(p => {
+        const item = document.createElement('div');
+        item.className = 'item';
+        item.innerHTML = `
+          <img src="${p.imagen}" alt="${p.nombre}" onerror="this.src='https://via.placeholder.com/150'">
+          <h3>${p.nombre}</h3>
+          <p>${p.descripcion}</p>
+          <span class="price">$${p.precio}</span>
+        `;
+        cont.appendChild(item);
+      });
+
+      if (filtrados.length > 0) {
+        cont.scrollIntoView({ behavior: 'smooth' });
+      }
+    }
+
+    cargarProductos();
+  </script>
+
+</body>
+</html>
       color: #fda40c;
       min-height: 100vh;
     }
