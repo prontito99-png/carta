@@ -39,7 +39,7 @@
   <h1>Admin Carta — prontito</h1>
   <div class="topRow">
     <div style="flex:1">
-      <div style="margin-bottom:6px"><span class="small">Repositorio:</span> <b> tilo-restocafe / cartaaguero</b></div>
+      <div style="margin-bottom:6px"><span class="small">Repositorio:</span> <b> prontito99-png / carta</b></div>
       <div style="display:flex;gap:8px;align-items:center">
         <label style="min-width:40px">Token:</label>
         <input type="password" id="token" placeholder="Pegar token de GitHub (repo contents)" style="max-width:340px">
@@ -106,7 +106,7 @@
 /**********************************************************
  * Config + estado
  **********************************************************/
-const USERNAME = "prontito99-png.github.io";
+const USERNAME = "prontito99-png";
 const REPO = "carta";
 const BRANCH = "main";
 const MAIN_JSON = "productos.json";
@@ -134,7 +134,7 @@ function saveToken(){ const t = document.getElementById('token').value.trim(); i
 function clearToken(){ localStorage.removeItem('github_token'); document.getElementById('token').value = ''; document.getElementById('tokenStatus').innerText = 'Token borrado'; showToast('Token borrado', 'info', 1500); }
 function getToken(){ return localStorage.getItem('github_token'); }
 function toggleTokenVisibility(){ const inp = document.getElementById('token'); inp.type = inp.type === 'password' ? 'text' : 'password'; }
-(function initTokenStatus(){ const t = getToken(); if(t){ document.getElementById('tokenStatus').innerText = 'Token guardado'; document.getElementById('token').value = t; /* opcional: mostrar token en input */ } })();
+(function initTokenStatus(){ const t = getToken(); if(t){ document.getElementById('tokenStatus').innerText = 'Token guardado'; document.getElementById('token').value = t; } })();
 
 /**********************************************************
  * IDs y util
@@ -144,7 +144,7 @@ function generateNextProdId(){ let max = 0; for(const p of productos){ const n =
 function sanitizePrice(v){ if(v===undefined||v===null) return ''; const only = String(v).replace(/[^\d]/g,''); return only || ''; }
 
 /**********************************************************
- * Ordenar campos por idioma (ES id al final, EN id primero, PT id al final)
+ * Ordenar campos por idioma
  **********************************************************/
 function ordenarCamposPorIdioma(item, idioma){
   const id = item.id || '';
@@ -190,16 +190,15 @@ async function loadProducts(){
 }
 
 /**********************************************************
- * Render tabla (usar data-id por fila para evitar confundir índices)
+ * Render tabla
  **********************************************************/
 function render(lista){
   const tb = document.getElementById('tbody');
   tb.innerHTML = '';
 
-  // cuando se renderiza, guardamos la lista de ids visibles (para acciones desde la fila)
   filteredIds = lista.map(p => p.id);
 
-  lista.forEach((p, i) => {
+  lista.forEach((p) => {
     const tr = document.createElement('tr');
     tr.dataset.rowId = p.id || '';
 
@@ -281,7 +280,7 @@ function render(lista){
 function findIndexById(id){ return productos.findIndex(x => x.id === id); }
 
 /**********************************************************
- * Form helpers (ahora cargan por ID y scrollean al form)
+ * Form helpers
  **********************************************************/
 function toggleForm(){ const f=document.getElementById('form'); f.style.display = f.style.display === 'none' || f.style.display === '' ? 'block' : 'none'; if(f.style.display==='block') f.scrollIntoView({behavior:'smooth', block:'center'}); }
 function cancelForm(){ document.getElementById('editId').value=''; document.getElementById('nombre').value=''; document.getElementById('descripcion').value=''; document.getElementById('precio').value=''; document.getElementById('imagen').value=''; document.getElementById('categoria').value=''; document.getElementById('preview').style.display='none'; document.getElementById('form').style.display='none'; }
@@ -294,30 +293,8 @@ function guardarFormulario(){ const nombre=document.getElementById('nombre').val
   document.getElementById('form').style.display='none';
   showToast('Producto agregado/actualizado localmente','ok',1800);
 }
-function procesarMulti(){ const raw=document.getElementById('multiInput').value.trim(); if(!raw){ showToast('Nada para procesar','err'); return;} const lines=raw.split('\n').map(l=>l.trim()).filter(Boolean); for(const ln of lines){ const parts=ln.split('|').map(p=>p.trim()); const nombre=parts[0]||'Sin nombre'; const descripcion=parts[1]||''; const precio=sanitizePrice(parts[2]||''); const imagen=parts[3]||''; const categoria=parts[4]||''; const id=generateNextProdId(); productos.push({ id, nombre, descripcion, precio, imagen, categoria }); } document.getElementById('multiInput').value=''; render(productos); showToast('Productos agregados localmente. Presioná "Guardar TODOS los cambios".','info',3500); }
 
 function eliminarProductoPorId(id){ if(!confirm('Eliminar producto?')) return; const idx = findIndexById(id); if(idx !== -1){ productos.splice(idx,1); render(productos); showToast('Producto eliminado localmente','info',1600); } else { showToast('Producto no encontrado','err'); } }
-
-/**********************************************************
- * Refrescar array desde la tabla (importante antes de "Guardar TODOS")
- * Ahora se usa data-row-id para mapear
- **********************************************************/
-function refrescarArrayDesdeTabla(){
-  const filas = document.querySelectorAll("#tbody tr");
-  const nuevos = [];
-  filas.forEach((fila) => {
-    const id = fila.dataset.rowId || generateNextProdId();
-    const celdas = fila.querySelectorAll("td");
-    const nombre = celdas[1].querySelector("input").value.trim();
-    const descripcion = celdas[2].querySelector("textarea").value.trim();
-    const categoria = celdas[3].querySelector("input").value.trim();
-    const precio = sanitizePrice(celdas[4].querySelector("input").value.trim());
-    const productoExistente = productos.find(p => p.id === id) || {};
-    const imagen = productoExistente.imagen || '';
-    nuevos.push({ id, nombre, descripcion, categoria, precio, imagen });
-  });
-  productos = nuevos;
-}
 
 /**********************************************************
  * GitHub helpers
@@ -356,7 +333,7 @@ async function githubPutFile(path, contentString, message, sha){
 }
 
 /**********************************************************
- * Guardar productos.json (PARCHE: pedir SHA FRESCO justo antes de PUT)
+ * Guardar productos.json
  **********************************************************/
 async function saveMainJson(arr, commitMessage){
   const out = arr.map(item => ordenarCamposPorIdioma(item, 'ES'));
@@ -365,13 +342,11 @@ async function saveMainJson(arr, commitMessage){
   let shaActual;
   try{ const info = await githubGetFileInfo(MAIN_JSON); shaActual = info.sha; }catch(e){ shaActual = undefined; }
 
-  try{ const info2 = await githubGetFileInfo(MAIN_JSON); shaActual = info2.sha; }catch(e){ }
-
   await githubPutFile(MAIN_JSON, contentString, commitMessage, shaActual);
 }
 
 /**********************************************************
- * Sincronizar precios en EN y PT (PARCHE: pedir SHA fresco ANTES de PUT)
+ * Sincronizar precios en EN y PT
  **********************************************************/
 async function syncPricesToLangs(){
   const token = getToken();
@@ -421,7 +396,7 @@ async function syncPricesToLangs(){
 }
 
 /**********************************************************
- * Guardar fila por ID (usa saveMainJson + syncPricesToLangs)
+ * Guardar fila por ID
  **********************************************************/
 async function guardarFilaPorId(id){
   try{
@@ -440,11 +415,10 @@ async function guardarFilaPorId(id){
 }
 
 /**********************************************************
- * Guardar TODOS - refresca tabla y usa saveMainJson parcheado
+ * Guardar TODOS
  **********************************************************/
 async function guardarTodosLosPrecios(){
   try{
-    // NO reconstruir productos desde la tabla
     productos = productos.map(p => ({
       ...p,
       precio: sanitizePrice(p.precio)
@@ -463,7 +437,7 @@ async function guardarTodosLosPrecios(){
 }
 
 /**********************************************************
- * Filtrado (no rompe indices: actions usan ids)
+ * Filtrado
  **********************************************************/
 function filterProducts(){
   const q = document.getElementById('search').value.toLowerCase().trim();
@@ -475,8 +449,9 @@ function filterProducts(){
   );
   render(filtered);
 }
+
 function irWhatsApp(){
-  const numero = "5491123140119"; // ← poné tu número real
+  const numero = "5491123140119";
   const mensaje = encodeURIComponent(
     "Hola, necesito ayuda con el admin de la carta digital"
   );
@@ -489,7 +464,5 @@ function irWhatsApp(){
 document.addEventListener('DOMContentLoaded', () => { loadProducts(); });
 </script>
 
-</body>
-</html>
 </body>
 </html>
