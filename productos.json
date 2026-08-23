@@ -4,7 +4,7 @@
     "nombre": "Café Express",
     "descripcion": "Café clásico caliente",
     "precio": "1500",
-    "imagen": "prontito.jpeg",
+    "imagen": "img/prontito.jpeg",
     "categoria": "Cafetería"
   }
 ]
