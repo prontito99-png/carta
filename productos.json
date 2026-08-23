@@ -1,10 +1,10 @@
 [
-{
-    "nombre": "Ravioles",
-    "descripcion": "salsa a elección (boloñesa, crema, rosa, estofado, blanca)",
-    "precio": "16000",
-    "imagen": "img/IMG_1058.jpeg",
-    "categoria": "Porción 🍽️",
-    "id": "prod0001"
-  },
+  {
+    "id": "prod0001",
+    "nombre": "Café Express",
+    "descripcion": "Café clásico caliente",
+    "precio": "1500",
+    "imagen": "prontito.jpeg",
+    "categoria": "Cafetería"
+  }
 ]
