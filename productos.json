@@ -22,5 +22,127 @@
     "precio": "1500",
     "imagen": "img/prontito.jpeg",
     "categoria": "pizza "
-  }
+  },
+    {
+    "id": "prod0004",
+    "nombre": "pizza calabresa",
+    "descripcion": "pizza ",
+    "precio": "1500",
+    "imagen": "img/prontito.jpeg",
+    "categoria": "pizza "
+  },
+  {
+    "id": "prod0005",
+    "nombre": "pizza huevo",
+    "descripcion": "pizza ",
+    "precio": "1500",
+    "imagen": "img/prontito.jpeg",
+    "categoria": "pizza "
+  },
+  {
+    "id": "prod0006",
+    "nombre": "pizza otros",
+    "descripcion": "pizza ",
+    "precio": "1500",
+    "imagen": "img/prontito.jpeg",
+    "categoria": "pizza "
+  }, 
+  {
+    "id": "prod0007",
+    "nombre": "faina",
+    "descripcion": "faina ",
+    "precio": "1500",
+    "imagen": "img/prontito.jpeg",
+    "categoria": "pizza "
+  }, 
+  {
+    "id": "prod0008",
+    "nombre": "Empanedas",
+    "descripcion": "Empanedas Carne,Empanedas Pollo, Empanedas j y q,cebolla y quese, humita y otras ",
+    "precio": "1500",
+    "imagen": "img/prontito.jpeg",
+    "categoria": "Empanedas "
+  },
+   {
+    "id": "prod0009",
+    "nombre": "Mila de Carne",
+    "descripcion": "Con Fritas ",
+    "precio": "1500",
+    "imagen": "img/prontito.jpeg",
+    "categoria": "Sandwich "
+  },  
+  {
+    "id": "prod00010",
+    "nombre": "Mila de Pollo",
+    "descripcion": "Con Fritas ",
+    "precio": "1500",
+    "imagen": "img/prontito.jpeg",
+    "categoria": "Sandwich "
+  }, 
+   {
+    "id": "prod00011",
+    "nombre": "Sandwich pollo relleno",
+    "descripcion": "Con Fritas ",
+    "precio": "1500",
+    "imagen": "img/prontito.jpeg",
+    "categoria": "Sandwich "
+  }, 
+   {
+    "id": "prod00012",
+    "nombre": "Sandwich Bondiola",
+    "descripcion": "Con Fritas ",
+    "precio": "1500",
+    "imagen": "img/prontito.jpeg",
+    "categoria": "Sandwich "
+  }, 
+   {
+    "id": "prod00013",
+    "nombre": " Chori Pan",
+    "descripcion": "Con Fritas ",
+    "precio": "1500",
+    "imagen": "img/prontito.jpeg",
+    "categoria": "Sandwich "
+  }, 
+  {
+    "id": "prod00014",
+    "nombre": "Papas frita Con Chedar",
+    "descripcion": "Con Fritas Chedar y verdeo ",
+    "precio": "1500",
+    "imagen": "img/prontito.jpeg",
+    "categoria": "Fritos "
+  }, 
+  {
+    "id": "prod00015",
+    "nombre": " Patitas Nagget",
+    "descripcion": "Con Fritas ",
+    "precio": "1500",
+    "imagen": "img/prontito.jpeg",
+    "categoria": "Fritos "
+  }, 
+    }, 
+  {
+    "id": "prod00016",
+    "nombre": " Hamburgesa sinple",
+    "descripcion": "Con Fritas ",
+    "precio": "1500",
+    "imagen": "img/prontito.jpeg",
+    "categoria": "Hamburgesa "
+  }, 
+   {
+    "id": "prod00017",
+    "nombre": " Hamburgesa Clacica",
+    "descripcion": "Con jamon y queso,Fritas ",
+    "precio": "1500",
+    "imagen": "img/prontito.jpeg",
+    "categoria": "Hamburgesa "
+  }, 
+  {
+    "id": "prod00018",
+    "nombre": " Hamburgesa Completa",
+    "descripcion": "Con jamon y queso,Fritas ",
+    "precio": "1500",
+    "imagen": "img/prontito.jpeg",
+    "categoria": "Hamburgesa "
+  }, 
+  
 ]
