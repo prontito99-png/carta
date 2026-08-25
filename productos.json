@@ -6,7 +6,7 @@
     "precio": "1500",
     "imagen": "img/prontito.jpeg",
     "categoria": "pizza "
-  }
+  },
   {
     "id": "prod0002",
     "nombre": "pizza especial",
@@ -14,7 +14,7 @@
     "precio": "1500",
     "imagen": "img/prontito.jpeg",
     "categoria": "pizza "
-  }
+  },
    {
     "id": "prod0003",
     "nombre": "pizza napo",
