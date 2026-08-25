@@ -1,468 +1,622 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Admin Carta - prontito (Sincroniza precios ES/EN/PT)</title>
-  <style>
-    body{font-family:Arial,Helvetica,sans-serif;margin:18px;background:#f7f3f0;color:#333}
-    h1{text-align:center;color:#806250;margin-bottom:10px}
-    .topRow{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;gap:10px}
-    .controls{display:flex;gap:8px;align-items:center}
-    input[type="text"], input[type="password"], textarea{padding:8px;border-radius:6px;border:1px solid #ccc;width:100%;box-sizing:border-box}
-    button{background:#806250;color:#fff;border:none;padding:8px 10px;border-radius:6px;cursor:pointer}
-    button.secondary{background:#5c8a50}
-    button.danger{background:#c0392b}
-    form{background:#fff;padding:12px;border-radius:10px;margin-bottom:12px;display:none}
-    table{width:100%;border-collapse:collapse;background:#fff}
-    th,td{border:1px solid #ddd;padding:8px;vertical-align:top}
-    th{background:#806250;color:#fff}
-    img.mini{max-width:60px;border-radius:6px}
-    #guardarTodos{position:fixed;top:18px;right:18px;z-index:1200;padding:10px 14px;background:#a07b68;color:#fff;border-radius:8px}
-    .small{font-size:13px;color:#666}
-    .rowActions{display:flex;gap:6px}
-    .previewImg{max-width:120px;margin-top:8px;border-radius:6px}
-    textarea#multiInput{width:100%;padding:8px;border-radius:6px;border:1px solid #ccc;box-sizing:border-box}
-    .toast {
-      position: fixed; top: 24px; right: 24px; z-index: 2000; padding: 12px 16px;
-      border-radius: 8px; color: white; font-weight: 600; box-shadow: 0 6px 18px rgba(0,0,0,0.15);
-      opacity: 0; transform: translateY(-10px); transition: opacity .25s ease, transform .25s ease; max-width: 360px;
-    }
-    .toast.show { opacity: 1; transform: translateY(0); }
-    .toast.ok { background: #2ecc71; }
-    .toast.info { background: #3498db; }
-    .toast.err { background: #e74c3c; }
-    @media(max-width:720px){ .topRow{flex-direction:column;align-items:flex-start} table{font-size:13px} }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Génesis Electrodomésticos</title>
+    <!-- Google Fonts -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Outfit:wght@400;600;800&display=swap"
+        rel="stylesheet">
+
+    <style>
+        :root {
+            --bg-color: #0f172a;
+            --card-bg: #1e293b;
+            --text-color: #f8fafc;
+            --text-muted: #94a3b8;
+            --primary-color: #38bdf8;
+            --accent-color: #2563eb;
+            --shadow-sm: 0 4px 10px rgba(0, 0, 0, 0.3);
+            --shadow-md: 0 8px 24px rgba(0, 0, 0, 0.5);
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: var(--bg-color);
+            margin: 0;
+            padding: 0;
+            color: var(--text-color);
+            text-align: center;
+            scroll-behavior: smooth;
+        }
+
+        /* ================= HEADER ================= */
+        header {
+            height: 200px;
+            background: linear-gradient(135deg, #1e293b, #0f172a);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            position: relative;
+            box-shadow: var(--shadow-sm);
+        }
+
+        header img {
+            max-height: 180px;
+            max-width: 95%;
+            object-fit: contain;
+        }
+
+        .header-title {
+            font-family: 'Outfit', sans-serif;
+            font-size: 2.8rem;
+            margin: 0;
+            color: #fff;
+            letter-spacing: 2px;
+            font-weight: 800;
+            text-shadow: 0 0 15px rgba(56, 189, 248, 0.4);
+        }
+
+        .header-subtitle {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.1rem;
+            color: var(--primary-color);
+            margin: 5px 0 0 0;
+            letter-spacing: 6px;
+            font-weight: 600;
+        }
+
+        /* ================= BANNER ================= */
+        .banner {
+            background: rgba(30, 41, 59, 0.8);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: var(--primary-color);
+            padding: 12px 24px;
+            border-radius: 12px;
+            display: inline-block;
+            margin: 24px auto 10px auto;
+            font-weight: 600;
+            font-size: 1.1rem;
+            backdrop-filter: blur(8px);
+            box-shadow: var(--shadow-sm);
+        }
+
+        /* ================= BUSCADOR ================= */
+        .search-box {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin: 20px auto;
+            max-width: 600px;
+            padding: 0 15px;
+        }
+
+        .search-box input {
+            padding: 12px 16px;
+            width: 70%;
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: var(--card-bg);
+            color: var(--text-color);
+            font-family: 'Poppins', sans-serif;
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+        }
+
+        .search-box input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.25);
+        }
+
+        .search-box button {
+            background: var(--accent-color);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            padding: 12px 20px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+        }
+
+        .search-box button:hover {
+            background: #3b82f6;
+            transform: translateY(-1px);
+        }
+
+        #btnVoice {
+            background: rgba(255, 255, 255, 0.08);
+            color: var(--text-color);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 12px;
+            border-radius: 12px;
+        }
+
+        #btnVoice:hover {
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        /* ================= CATEGORÍAS ================= */
+        #category-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 10px;
+            margin: 20px auto;
+            max-width: 1000px;
+            padding: 0 15px;
+        }
+
+        #category-buttons button {
+            background: linear-gradient(135deg, #1e293b, #0f172a);
+            color: var(--text-muted);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 999px;
+            padding: 8px 20px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: var(--shadow-sm);
+        }
+
+        #category-buttons button:hover {
+            color: var(--text-color);
+            border-color: var(--primary-color);
+            transform: translateY(-2px);
+        }
+
+        #category-buttons button.active-cat {
+            background: linear-gradient(135deg, var(--accent-color), #1d4ed8);
+            color: #fff;
+            border-color: transparent;
+            transform: scale(1.05);
+            box-shadow: 0 4px 14px rgba(37, 99, 235, 0.4);
+        }
+
+        /* ================= GRILLA DE PRODUCTOS ================= */
+        #product-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 25px;
+            padding: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .item {
+            background: var(--card-bg);
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: var(--shadow-sm);
+            overflow: hidden;
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            text-align: left;
+        }
+
+        .item:hover {
+            transform: translateY(-6px);
+            border-color: rgba(56, 189, 248, 0.3);
+            box-shadow: var(--shadow-md);
+        }
+
+        .item img {
+            width: 100%;
+            height: 220px;
+            object-fit: cover;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            background: #151f32;
+        }
+
+        .item-info {
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            flex-grow: 1;
+        }
+
+        .item-title {
+            font-size: 1.15rem;
+            font-weight: 700;
+            margin: 0 0 8px 0;
+            color: var(--text-color);
+            line-height: 1.3;
+        }
+
+        .item-desc {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin: 0 0 16px 0;
+            line-height: 1.5;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            min-height: 3.8em;
+        }
+
+        .price {
+            font-size: 1.4rem;
+            font-weight: 800;
+            color: var(--primary-color);
+            margin-top: auto;
+        }
+
+        /* ================= BOTON SUBIR ================= */
+        #btnUp {
+            position: fixed;
+            bottom: 25px;
+            right: 25px;
+            background: var(--accent-color);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 45px;
+            height: 45px;
+            display: none;
+            cursor: pointer;
+            z-index: 1000;
+            font-size: 1.2rem;
+            box-shadow: var(--shadow-md);
+            transition: all 0.2s ease;
+        }
+
+        #btnUp:hover {
+            background: #3b82f6;
+            transform: scale(1.1);
+        }
+
+        /* ================= ONDA DE SONIDO / VOICE SEARCH ================= */
+        .voice-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(15, 23, 42, 0.8);
+            backdrop-filter: blur(10px);
+            z-index: 5000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: all 0.3s ease;
+        }
+
+        .voice-overlay.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .voice-card {
+            background: rgba(30, 41, 59, 0.9);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 24px;
+            padding: 40px;
+            text-align: center;
+            box-shadow: var(--shadow-md);
+            max-width: 380px;
+            width: 90%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            transform: scale(0.9);
+            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        .voice-overlay.active .voice-card {
+            transform: scale(1);
+        }
+
+        .voice-icon-wrapper {
+            position: relative;
+            width: 80px;
+            height: 80px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .voice-mic-icon {
+            font-size: 2.2rem;
+            z-index: 2;
+        }
+
+        .voice-pulse {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background: rgba(56, 189, 248, 0.2);
+            animation: pulse-wave 2s infinite ease-out;
+            z-index: 1;
+        }
+
+        @keyframes pulse-wave {
+            0% {
+                transform: scale(0.8);
+                opacity: 0.8;
+            }
+
+            100% {
+                transform: scale(1.6);
+                opacity: 0;
+            }
+        }
+
+        .voice-card h3 {
+            margin: 10px 0 5px 0;
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.5rem;
+            color: #fff;
+            font-weight: 700;
+        }
+
+        .voice-card p {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            margin: 0 0 25px 0;
+        }
+
+        /* Sound Wave Animation */
+        .sound-wave {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            height: 40px;
+            margin-bottom: 30px;
+        }
+
+        .sound-wave span {
+            display: block;
+            width: 4px;
+            height: 10px;
+            background: var(--primary-color);
+            border-radius: 4px;
+            animation: bounce-wave 1.2s infinite ease-in-out;
+        }
+
+        .sound-wave span:nth-child(1) {
+            animation-delay: 0.1s;
+        }
+
+        .sound-wave span:nth-child(2) {
+            animation-delay: 0.3s;
+        }
+
+        .sound-wave span:nth-child(3) {
+            animation-delay: 0.6s;
+        }
+
+        .sound-wave span:nth-child(4) {
+            animation-delay: 0.2s;
+        }
+
+        .sound-wave span:nth-child(5) {
+            animation-delay: 0.4s;
+        }
+
+        @keyframes bounce-wave {
+
+            0%,
+            100% {
+                height: 10px;
+                background: var(--primary-color);
+            }
+
+            50% {
+                height: 38px;
+                background: var(--accent-color);
+            }
+        }
+
+        .voice-close-btn {
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: #fff;
+            font-family: 'Poppins', sans-serif;
+            font-size: 0.9rem;
+            font-weight: 600;
+            padding: 10px 24px;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .voice-close-btn:hover {
+            background: #ef4444;
+            border-color: transparent;
+        }
+    </style>
 </head>
+
 <body>
-  <h1>Admin Carta — prontito</h1>
-  <div class="topRow">
-    <div style="flex:1">
-      <div style="margin-bottom:6px"><span class="small">Repositorio:</span> <b> prontito99-png / carta</b></div>
-      <div style="display:flex;gap:8px;align-items:center">
-        <label style="min-width:40px">Token:</label>
-        <input type="password" id="token" placeholder="Pegar token de GitHub (repo contents)" style="max-width:340px">
-        <button onclick="saveToken()">Guardar</button>
-        <button onclick="clearToken()">Borrar</button>
-        <button style="background:#888;padding:6px 8px;border-radius:6px;margin-left:6px" onclick="toggleTokenVisibility()">👁</button>
-        <span class="small" id="tokenStatus" style="margin-left:8px">No guardado</span>
-      </div>
+
+    <!-- ONDA DE SONIDO / VOICE SEARCH OVERLAY -->
+    <div id="voice-overlay" class="voice-overlay">
+        <div class="voice-card">
+            <div class="voice-icon-wrapper">
+                <div class="voice-pulse"></div>
+                <div class="voice-mic-icon">🎤</div>
+            </div>
+            <h3>Escuchando...</h3>
+            <p>Hablá ahora para buscar en el catálogo</p>
+            <div class="sound-wave">
+                <span></span>
+                <span></span>
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+            <button id="btnVoiceClose" class="voice-close-btn">Cancelar</button>
+        </div>
     </div>
 
-    <div class="controls">
-      <input id="search" placeholder="Buscar..." oninput="filterProducts()" style="min-width:180px;max-width:360px">
-      <button id="toggleFormBtn" onclick="toggleForm()">+ Agregar producto</button>
-      <button class="secondary" onclick="irWhatsApp()">📲 Ayuda por WhatsApp</button>
-    </div>
-  </div>
+    <header>
+        <img src="prontito.jpeg" alt="logo">
+    </header>
 
-  <button id="guardarTodos" onclick="guardarTodosLosPrecios()">💾 Guardar TODOS los cambios</button>
+    <div class="banner" id="banner-text">¡!</div>
 
-  <!-- Formulario simple -->
-  <form id="form">
-    <input type="hidden" id="editId">
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
-      <div>
-        <label>Nombre</label>
-        <input id="nombre" type="text">
-      </div>
-      <div>
-        <label>Precio</label>
-        <input id="precio" type="text" placeholder="Ej: 3400 (sin $)">
-      </div>
-
-      <div style="grid-column:1/3">
-        <label>Descripción</label>
-        <textarea id="descripcion" rows="3"></textarea>
-      </div>
-
-      <div>
-        <label>Imagen (ruta o URL)</label>
-        <input id="imagen" type="text" oninput="previewImage()">
-        <img id="preview" class="previewImg" style="display:none">
-      </div>
-
-      <div>
-        <label>Categoría</label>
-        <input id="categoria" type="text" placeholder="Ej: Cafetería">
-      </div>
+    <div class="search-box">
+        <input id="search" type="text" placeholder="Buscar electrodoméstico o categoría...">
+        <button id="btnSearch">Buscar</button>
+        <button id="btnVoice" title="Buscar por voz">🎤</button>
     </div>
 
-    <div style="margin-top:10px;display:flex;gap:8px">
-      <button type="button" onclick="guardarFormulario()">Guardar</button>
-      <button type="button" onclick="cancelForm()" style="background:#999">Cancelar</button>
-    </div>
-  </form>
+    <div id="category-buttons"></div>
+    <div id="product-list"></div>
+    <button id="btnUp">⬆️</button>
 
-  <table aria-label="Productos">
-    <thead>
-      <tr><th style="width:80px">Imagen</th><th>Nombre</th><th>Descripción</th><th>Categoría</th><th style="width:100px">Precio (ES)</th><th style="width:180px">Acciones</th></tr>
-    </thead>
-    <tbody id="tbody"></tbody>
-  </table>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const USER = 'electrogenesis10-ops';
+            const REPO = 'carta';
 
-<script>
-/**********************************************************
- * Config + estado
- **********************************************************/
-const USERNAME = "prontito99-png";
-const REPO = "carta";
-const BRANCH = "main";
-const MAIN_JSON = "productos.json";
-const EN_JSON = "productos-en.json";
-const PT_JSON = "productos-port.json";
-let productos = []; // esta es la fuente de verdad
-let filteredIds = null; // si hay filtro, guardamos ids ordenados para acciones por fila
+            const categoryContainer = document.getElementById('category-buttons');
+            const productList = document.getElementById('product-list');
+            const searchInput = document.getElementById('search');
+            const btnSearch = document.getElementById('btnSearch');
+            const btnVoice = document.getElementById('btnVoice');
+            let productos = [];
 
-/**********************************************************
- * Toast
- **********************************************************/
-function showToast(msg, variant = 'ok', timeout = 3000){
-  const div = document.createElement('div');
-  div.className = 'toast ' + (variant === 'info' ? 'info' : variant === 'err' ? 'err' : 'ok');
-  div.innerText = (variant === 'err' ? '✖︎ ' : variant === 'info' ? 'ℹ︎ ' : '✔︎ ') + msg;
-  document.body.appendChild(div);
-  requestAnimationFrame(() => div.classList.add('show'));
-  setTimeout(() => { div.classList.remove('show'); setTimeout(()=> div.remove(), 300); }, timeout);
-}
+            // --- PRODUCTOS Y CATEGORIAS ---
+            async function load() {
+                try {
+                    const res = await fetch(`https://raw.githubusercontent.com/${USER}/${REPO}/main/productos.json`, { cache: "no-store" });
+                    if (!res.ok) throw new Error("No se pudo obtener el catálogo desde GitHub");
+                    const data = await res.json();
 
-/**********************************************************
- * Token (guardado en localStorage, botón de ver/ocultar)
- **********************************************************/
-function saveToken(){ const t = document.getElementById('token').value.trim(); if(!t){ showToast('Pegá tu token primero', 'err'); return; } localStorage.setItem('github_token', t); document.getElementById('tokenStatus').innerText = 'Token guardado'; showToast('Token guardado', 'ok', 1800); }
-function clearToken(){ localStorage.removeItem('github_token'); document.getElementById('token').value = ''; document.getElementById('tokenStatus').innerText = 'Token borrado'; showToast('Token borrado', 'info', 1500); }
-function getToken(){ return localStorage.getItem('github_token'); }
-function toggleTokenVisibility(){ const inp = document.getElementById('token'); inp.type = inp.type === 'password' ? 'text' : 'password'; }
-(function initTokenStatus(){ const t = getToken(); if(t){ document.getElementById('tokenStatus').innerText = 'Token guardado'; document.getElementById('token').value = t; } })();
+                    productos = data.map(p => ({
+                        id: p.id,
+                        nombre: p.nombre || p.name || p.nome || 'Electrodoméstico',
+                        descripcion: p.descripcion || p.description || p.descricao || '',
+                        precio: p.precio || p.price || p.preco || '0',
+                        imagen: p.imagen || p.image || p.imagem || 'https://via.placeholder.com/300x200?text=G%C3%A9nesis+Electro',
+                        categoria: p.categoria || p.category || 'General'
+                    }));
 
-/**********************************************************
- * IDs y util
- **********************************************************/
-function extractNumberFromProdId(id){ if(!id) return null; const m = String(id).match(/(\d+)\s*$/); if(m) return parseInt(m[1],10); return null; }
-function generateNextProdId(){ let max = 0; for(const p of productos){ const n = extractNumberFromProdId(p.id || ''); if(Number.isFinite(n) && n > max) max = n; } const next = max + 1; return 'prod' + String(next).padStart(4, '0'); }
-function sanitizePrice(v){ if(v===undefined||v===null) return ''; const only = String(v).replace(/[^\d]/g,''); return only || ''; }
+                    renderCategorias();
+                    render(productos);
+                } catch (e) {
+                    console.error(e);
+                    productList.innerHTML = `<p style="color: var(--text-muted); grid-column: 1/-1; padding: 40px;">No se pudo cargar el catálogo. Intente de nuevo más tarde.</p>`;
+                }
+            }
 
-/**********************************************************
- * Ordenar campos por idioma
- **********************************************************/
-function ordenarCamposPorIdioma(item, idioma){
-  const id = item.id || '';
-  if(idioma === 'EN'){
-    return { id: id, name: item.name || item.nombre || item.nome || '', description: item.description || item.descripcion || item.descricao || '', price: item.price || item.precio || item.preco || '', image: item.image || item.imagen || item.imagem || '', category: item.category || item.categoria || '' };
-  }
-  if(idioma === 'PT'){
-    return { nome: item.nome || item.name || item.nombre || '', descricao: item.descricao || item.description || item.descripcion || '', preco: item.preco || item.price || item.precio || '', imagem: item.imagem || item.image || item.imagen || '', categoria: item.categoria || item.category || '', id: id };
-  }
-  return { nombre: item.nombre || item.name || item.nome || '', descripcion: item.descripcion || item.description || item.descricao || '', precio: item.precio || item.price || item.preco || '', imagen: item.imagen || item.image || item.imagem || '', categoria: item.categoria || item.category || '', id: id };
-}
+            function render(arr) {
+                if (arr.length === 0) {
+                    productList.innerHTML = `<p style="color: var(--text-muted); grid-column: 1/-1; padding: 40px;">No se encontraron resultados.</p>`;
+                    return;
+                }
+                productList.innerHTML = arr.map(p => `
+                    <div class="item">
+                        <img src="${p.imagen}" alt="${p.nombre}" onerror="this.src='https://via.placeholder.com/300x200?text=G%C3%A9nesis+Electro'">
+                        <div class="item-info">
+                            <div>
+                                <h3 class="item-title">${p.nombre}</h3>
+                                <p class="item-desc">${p.descripcion}</p>
+                            </div>
+                            <span class="price">${p.precio.toString().includes('$') ? p.precio : '$' + p.precio}</span>
+                        </div>
+                    </div>`).join('');
+            }
 
-/**********************************************************
- * Cargar productos.json (desde raw.githubusercontent)
- **********************************************************/
-async function loadProducts(){
-  try{
-    const r = await fetch(`https://raw.githubusercontent.com/${USERNAME}/${REPO}/${BRANCH}/${MAIN_JSON}`);
-    if(!r.ok) throw new Error(`No se pudo cargar ${MAIN_JSON} (${r.status})`);
-    const arr = await r.json();
-    if(!Array.isArray(arr)) throw new Error('Formato inválido en productos.json');
+            function renderCategorias() {
+                const cats = ["Todos", ...new Set(productos.map(p => p.categoria).filter(Boolean))];
+                categoryContainer.innerHTML = cats.map(cat => `
+                    <button class="${cat === "Todos" ? 'active-cat' : ''}" onclick="filtrarCat('${cat}', this)">${cat}</button>
+                `).join('');
+            }
 
-    productos = arr.map(item => ({
-      id: item.id || '',
-      nombre: item.nombre || item.name || item.nome || '',
-      descripcion: item.descripcion || item.description || item.descricao || '',
-      precio: String(item.precio || item.price || item.preco || ''),
-      imagen: item.imagen || item.image || item.imagem || '',
-      categoria: item.categoria || item.category || ''
-    }));
+            window.filtrarCat = function (cat, btn) {
+                document.querySelectorAll("#category-buttons button").forEach(b => b.classList.remove("active-cat"));
+                btn.classList.add("active-cat");
+                const filtrados = cat === "Todos" ? productos : productos.filter(p => p.categoria === cat);
+                render(filtrados);
+                window.scrollTo({ top: productList.offsetTop - 80, behavior: "smooth" });
+            }
 
-    let changed = false;
-    productos.forEach(p => { if(!p.id || !/^prod\d{4}$/.test(p.id)){ p.id = generateNextProdId(); changed = true; } });
-    render(productos);
-    if(changed) showToast('Se asignaron IDs faltantes (prodXXXX)', 'info', 2500);
+            // --- LÓGICA DE BÚSQUEDA ---
+            function filtrar() {
+                const q = searchInput.value.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+                const f = productos.filter(p => {
+                    const nombre = (p.nombre || "").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+                    const desc = (p.descripcion || "").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+                    const cat = (p.categoria || "").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+                    return nombre.includes(q) || desc.includes(q) || cat.includes(q);
+                });
+                render(f);
+            }
 
-  }catch(e){
-    console.warn(e);
-    productos = [];
-    render(productos);
-    showToast("No se pudo cargar productos.json", 'err', 5000);
-  }
-}
+            searchInput.addEventListener('input', filtrar);
+            btnSearch.onclick = () => {
+                filtrar();
+                window.scrollTo({ top: productList.offsetTop - 80, behavior: "smooth" });
+            };
+            searchInput.onkeydown = (e) => {
+                if (e.key === 'Enter') {
+                    filtrar();
+                    window.scrollTo({ top: productList.offsetTop - 80, behavior: "smooth" });
+                }
+            };
 
-/**********************************************************
- * Render tabla
- **********************************************************/
-function render(lista){
-  const tb = document.getElementById('tbody');
-  tb.innerHTML = '';
+            // --- BÚSQUEDA POR VOZ ---
+            const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+            const voiceOverlay = document.getElementById('voice-overlay');
+            const btnVoiceClose = document.getElementById('btnVoiceClose');
 
-  filteredIds = lista.map(p => p.id);
+            if (SpeechRecognition) {
+                const recognition = new SpeechRecognition();
+                recognition.lang = 'es-AR';
+                recognition.onstart = () => {
+                    btnVoice.textContent = "🛑";
+                    if (voiceOverlay) voiceOverlay.classList.add('active');
+                };
+                recognition.onend = () => {
+                    btnVoice.textContent = "🎤";
+                    if (voiceOverlay) voiceOverlay.classList.remove('active');
+                };
+                recognition.onresult = (event) => {
+                    const voiceText = event.results[0][0].transcript;
+                    searchInput.value = voiceText;
+                    filtrar();
+                    window.scrollTo({ top: productList.offsetTop - 80, behavior: "smooth" });
+                };
+                btnVoice.onclick = () => {
+                    recognition.start();
+                };
+                if (btnVoiceClose) {
+                    btnVoiceClose.onclick = () => {
+                        recognition.abort();
+                    };
+                }
+            } else {
+                btnVoice.style.display = 'none';
+            }
 
-  lista.forEach((p) => {
-    const tr = document.createElement('tr');
-    tr.dataset.rowId = p.id || '';
+            // --- BOTON SUBIR ---
+            window.onscroll = () => { document.getElementById('btnUp').style.display = window.scrollY > 300 ? "block" : "none"; };
+            document.getElementById('btnUp').onclick = () => window.scrollTo({ top: 0, behavior: "smooth" });
 
-    // imagen
-    const tdImg = document.createElement('td');
-    const img = document.createElement('img');
-    img.className = 'mini';
-    img.src = p.imagen || '';
-    img.onerror = () => { img.style.display='none'; };
-    tdImg.appendChild(img);
-    tr.appendChild(tdImg);
-
-    // nombre
-    const tdNombre = document.createElement('td');
-    const nombreInput = document.createElement('input');
-    nombreInput.type = 'text';
-    nombreInput.value = p.nombre || '';
-    nombreInput.oninput = e => {
-      const idx = findIndexById(p.id);
-      if(idx !== -1) productos[idx].nombre = e.target.value;
-    };
-    tdNombre.appendChild(nombreInput);
-    tr.appendChild(tdNombre);
-
-    // descripcion
-    const tdDesc = document.createElement('td');
-    const desc = document.createElement('textarea');
-    desc.rows = 2;
-    desc.value = p.descripcion || '';
-    desc.oninput = e => { const idx = findIndexById(p.id); if(idx !== -1) productos[idx].descripcion = e.target.value; };
-    tdDesc.appendChild(desc);
-    tr.appendChild(tdDesc);
-
-    // categoria
-    const tdCat = document.createElement('td');
-    const cat = document.createElement('input');
-    cat.type = 'text';
-    cat.value = p.categoria || '';
-    cat.oninput = e => { const idx = findIndexById(p.id); if(idx !== -1) productos[idx].categoria = e.target.value; };
-    tdCat.appendChild(cat);
-    tr.appendChild(tdCat);
-
-    // precio
-    const tdPrecio = document.createElement('td');
-    const precio = document.createElement('input');
-    precio.type = 'text';
-    precio.value = p.precio || '';
-    precio.oninput = e => { const idx = findIndexById(p.id); if(idx !== -1) productos[idx].precio = e.target.value; };
-    tdPrecio.appendChild(precio);
-    tr.appendChild(tdPrecio);
-
-    // acciones
-    const tdAcc = document.createElement('td');
-    tdAcc.className = 'rowActions';
-
-    const b1 = document.createElement('button');
-    b1.textContent = "Guardar";
-    b1.onclick = () => guardarFilaPorId(p.id);
-
-    const b2 = document.createElement('button');
-    b2.textContent = "Editar";
-    b2.style.background = "#2d87d6";
-    b2.onclick = () => loadIntoFormById(p.id);
-
-    const b3 = document.createElement('button');
-    b3.textContent = "Eliminar";
-    b3.className = "danger";
-    b3.onclick = () => eliminarProductoPorId(p.id);
-
-    tdAcc.appendChild(b1);
-    tdAcc.appendChild(b2);
-    tdAcc.appendChild(b3);
-
-    tr.appendChild(tdAcc);
-    tb.appendChild(tr);
-  });
-}
-
-function findIndexById(id){ return productos.findIndex(x => x.id === id); }
-
-/**********************************************************
- * Form helpers
- **********************************************************/
-function toggleForm(){ const f=document.getElementById('form'); f.style.display = f.style.display === 'none' || f.style.display === '' ? 'block' : 'none'; if(f.style.display==='block') f.scrollIntoView({behavior:'smooth', block:'center'}); }
-function cancelForm(){ document.getElementById('editId').value=''; document.getElementById('nombre').value=''; document.getElementById('descripcion').value=''; document.getElementById('precio').value=''; document.getElementById('imagen').value=''; document.getElementById('categoria').value=''; document.getElementById('preview').style.display='none'; document.getElementById('form').style.display='none'; }
-function previewImage(){ const v=document.getElementById('imagen').value.trim(); const img=document.getElementById('preview'); if(!v){ img.style.display='none'; img.src=''; return; } img.src=v; img.style.display='block'; img.onerror=()=>{ img.style.display='none'; }; }
-function loadIntoFormById(id){ const idx = findIndexById(id); if(idx === -1){ showToast('Producto no encontrado para editar','err'); return; } const p = productos[idx]; document.getElementById('editId').value = p.id; document.getElementById('nombre').value = p.nombre||''; document.getElementById('descripcion').value = p.descripcion||''; document.getElementById('precio').value = p.precio||''; document.getElementById('imagen').value = p.imagen||''; document.getElementById('categoria').value = p.categoria||''; previewImage(); const f = document.getElementById('form'); f.style.display = 'block'; f.scrollIntoView({behavior:'smooth', block:'center'}); }
-function validarProductoObj(obj){ if(!obj.nombre) return "Falta nombre"; if(!obj.precio) return "Falta precio"; return null; }
-function guardarFormulario(){ const nombre=document.getElementById('nombre').value.trim(); const descripcion=document.getElementById('descripcion').value.trim(); const precio=sanitizePrice(document.getElementById('precio').value.trim()); const imagen=document.getElementById('imagen').value.trim(); const categoria=document.getElementById('categoria').value.trim(); const editId=document.getElementById('editId').value; const obj={ nombre, descripcion, precio, imagen, categoria }; const err=validarProductoObj(obj); if(err){ showToast(err,'err'); return; } if(editId){ const idx = findIndexById(editId); if(idx !== -1){ productos[idx] = { ...productos[idx], ...obj }; if(!productos[idx].id || !/^prod\d{4}$/.test(productos[idx].id)) productos[idx].id = generateNextProdId(); } else { showToast('ID de edición no encontrado','err'); }
-  } else { const id = generateNextProdId(); productos.push({ id, ...obj }); }
-  render(productos);
-  document.getElementById('form').style.display='none';
-  showToast('Producto agregado/actualizado localmente','ok',1800);
-}
-
-function eliminarProductoPorId(id){ if(!confirm('Eliminar producto?')) return; const idx = findIndexById(id); if(idx !== -1){ productos.splice(idx,1); render(productos); showToast('Producto eliminado localmente','info',1600); } else { showToast('Producto no encontrado','err'); } }
-
-/**********************************************************
- * GitHub helpers
- **********************************************************/
-async function githubGetFileInfo(path){
-  const token = getToken();
-  const headers = token ? { Authorization: 'token ' + token, 'Accept': 'application/vnd.github.v3+json' } : { 'Accept': 'application/vnd.github.v3+json' };
-  const url = `https://api.github.com/repos/${USERNAME}/${REPO}/contents/${path}?ref=${BRANCH}`;
-  const res = await fetch(url, { headers });
-  if(!res.ok) {
-    const txt = await res.text().catch(()=>'');
-    throw new Error(`GitHub get ${path} -> ${res.status} ${txt}`);
-  }
-  return await res.json();
-}
-
-async function githubPutFile(path, contentString, message, sha){
-  const token = getToken();
-  if(!token) throw new Error('Token requerido para subir cambios a GitHub');
-
-  const url = `https://api.github.com/repos/${USERNAME}/${REPO}/contents/${path}`;
-  const body = { message, content: btoa(unescape(encodeURIComponent(contentString))), branch: BRANCH };
-  if(sha) body.sha = sha;
-
-  const res = await fetch(url, {
-    method: 'PUT',
-    headers: { Authorization: 'token ' + token, 'Content-Type': 'application/json', 'Accept': 'application/vnd.github.v3+json' },
-    body: JSON.stringify(body)
-  });
-
-  const data = await res.json().catch(()=>({}));
-  if(!res.ok){
-    throw new Error(`GitHub PUT ${path} -> ${res.status}: ${data.message || JSON.stringify(data)}`);
-  }
-  return data;
-}
-
-/**********************************************************
- * Guardar productos.json
- **********************************************************/
-async function saveMainJson(arr, commitMessage){
-  const out = arr.map(item => ordenarCamposPorIdioma(item, 'ES'));
-  const contentString = JSON.stringify(out, null, 2);
-
-  let shaActual;
-  try{ const info = await githubGetFileInfo(MAIN_JSON); shaActual = info.sha; }catch(e){ shaActual = undefined; }
-
-  await githubPutFile(MAIN_JSON, contentString, commitMessage, shaActual);
-}
-
-/**********************************************************
- * Sincronizar precios en EN y PT
- **********************************************************/
-async function syncPricesToLangs(){
-  const token = getToken();
-  if(!token){ showToast('Token requerido para sincronizar EN/PT', 'err', 4000); return; }
-
-  const byId = {};
-  productos.forEach(p => { if(p.id) byId[p.id] = p; });
-
-  async function processLangFile(filename, idioma){
-    let info;
-    try{ info = await githubGetFileInfo(filename); }catch(e){ info = null; }
-
-    let arr = [];
-    if(info && info.content){
-      const raw = info.content.replace(/\n/g,'');
-      const decoded = decodeURIComponent(escape(window.atob(raw)));
-      try{ arr = JSON.parse(decoded); if(!Array.isArray(arr)) arr = []; } catch(e){ arr = []; }
-    }
-
-    let changed = false;
-
-    const newArr = arr.map(item => {
-      const itemId = item.id || null;
-      if(itemId && byId[itemId]){
-        const nuevo = sanitizePrice(byId[itemId].precio);
-        if('precio' in item && String(item.precio) !== nuevo){ item.precio = nuevo; changed = true; }
-        if('price' in item && String(item.price) !== nuevo){ item.price = nuevo; changed = true; }
-        if('preco' in item && String(item.preco) !== nuevo){ item.preco = nuevo; changed = true; }
-      }
-      if(!item.id && itemId) item.id = itemId;
-      return ordenarCamposPorIdioma(item, idioma);
-    });
-
-    if(info === null){
-      const created = [];
-      for(const pid in byId){ const p = byId[pid]; if(!p) continue; const obj = ordenarCamposPorIdioma({ id: p.id, nombre: p.nombre, descripcion: p.descripcion, precio: p.precio, imagen: p.imagen, categoria: p.categoria }, idioma); created.push(obj); }
-      const contentStringCreate = JSON.stringify(created, null, 2);
-      await githubPutFile(filename, contentStringCreate, `Crea ${filename} desde productos.json`, undefined);
-      return;
-    }
-
-    if(changed){ const latestInfo = await githubGetFileInfo(filename); const latestSha = latestInfo.sha; const contentString = JSON.stringify(newArr, null, 2); await githubPutFile(filename, contentString, `Sincroniza precios desde productos.json`, latestSha); }
-  }
-
-  await processLangFile(EN_JSON, 'EN');
-  await processLangFile(PT_JSON, 'PT');
-}
-
-/**********************************************************
- * Guardar fila por ID
- **********************************************************/
-async function guardarFilaPorId(id){
-  try{
-    const idx = findIndexById(id);
-    if(idx === -1) throw new Error('Producto no encontrado');
-    const p = productos[idx];
-    if(!p.id || !/^prod\d{4}$/.test(p.id)) p.id = generateNextProdId();
-    p.precio = sanitizePrice(p.precio);
-
-    await saveMainJson(productos, `Actualiza producto ${p.id} - precio ${p.precio}`);
-    await syncPricesToLangs();
-
-    showToast('Producto guardado y precios sincronizados en EN/PT', 'ok', 2600);
-    render(productos);
-  }catch(e){ console.error(e); showToast('Error al guardar fila: ' + (e.message||e), 'err', 5000); }
-}
-
-/**********************************************************
- * Guardar TODOS
- **********************************************************/
-async function guardarTodosLosPrecios(){
-  try{
-    productos = productos.map(p => ({
-      ...p,
-      precio: sanitizePrice(p.precio)
-    }));
-
-    await saveMainJson(productos, `Guardar TODOS los productos - sincronizando precios a EN/PT`);
-    await syncPricesToLangs();
-
-    showToast('Todos los cambios guardados y sincronizados (ES/EN/PT)', 'ok', 3000);
-    render(productos);
-
-  }catch(e){
-    console.error(e);
-    showToast('Error al guardar todos: ' + (e.message||e), 'err', 6000);
-  }
-}
-
-/**********************************************************
- * Filtrado
- **********************************************************/
-function filterProducts(){
-  const q = document.getElementById('search').value.toLowerCase().trim();
-  if(!q){ render(productos); return; }
-  const filtered = productos.filter(p =>
-    (p.nombre||'').toLowerCase().includes(q) ||
-    (p.descripcion||'').toLowerCase().includes(q) ||
-    (p.categoria||'').toLowerCase().includes(q)
-  );
-  render(filtered);
-}
-
-function irWhatsApp(){
-  const numero = "5491123140119";
-  const mensaje = encodeURIComponent(
-    "Hola, necesito ayuda con el admin de la carta digital"
-  );
-  window.open(`https://wa.me/${numero}?text=${mensaje}`, "_blank");
-}
-
-/**********************************************************
- * Init
- **********************************************************/
-document.addEventListener('DOMContentLoaded', () => { loadProducts(); });
-</script>
-
+            load();
+        });
+    </script>
 </body>
+
 </html>
