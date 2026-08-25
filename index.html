@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Génesis Electrodomésticos</title>
+    <title>Pron Tito/title>
     <!-- Google Fonts -->
     <link
         href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Outfit:wght@400;600;800&display=swap"
@@ -468,13 +468,13 @@
     </div>
 
     <header>
-        <img src="prontito.jpeg" alt="logo">
+        <img src="img/prontito.jpeg" alt="logo">
     </header>
 
     <div class="banner" id="banner-text">¡!</div>
 
     <div class="search-box">
-        <input id="search" type="text" placeholder="Buscar electrodoméstico o categoría...">
+        <input id="search" type="text" placeholder="Buscar producto o categoría...">
         <button id="btnSearch">Buscar</button>
         <button id="btnVoice" title="Buscar por voz">🎤</button>
     </div>
@@ -504,7 +504,7 @@
 
                     productos = data.map(p => ({
                         id: p.id,
-                        nombre: p.nombre || p.name || p.nome || 'Electrodoméstico',
+                        nombre: p.nombre || p.name || p.nome || 'Producto',
                         descripcion: p.descripcion || p.description || p.descricao || '',
                         precio: p.precio || p.price || p.preco || '0',
                         imagen: p.imagen || p.image || p.imagem || 'https://via.placeholder.com/300x200?text=G%C3%A9nesis+Electro',
