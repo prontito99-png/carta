@@ -1,10 +1,26 @@
 [
   {
     "id": "prod0001",
-    "nombre": "Café Express",
-    "descripcion": "Café clásico caliente",
+    "nombre": "pizza",
+    "descripcion": "pizza muza",
     "precio": "1500",
     "imagen": "img/prontito.jpeg",
-    "categoria": "Cafetería"
-  }
+    "categoria": "pizza "
+  },
+  {
+    "id": "prod0002",
+    "nombre": "pizza especial",
+    "descripcion": "pizza jamon y morrones",
+    "precio": "1500",
+    "imagen": "img/prontito.jpeg",
+    "categoria": "pizza "
+  },
+   {
+    "id": "prod0003",
+    "nombre": "pizza napo",
+    "descripcion": "pizza ",
+    "precio": "1500",
+    "imagen": "img/prontito.jpeg",
+    "categoria": "pizza "
+  },
 ]
