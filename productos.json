@@ -142,5 +142,13 @@
     "precio": "1500",
     "imagen": "img/prontito.jpeg",
     "categoria": "Hamburguesas"
+  },
+  {
+    "id": "prod0019",
+    "nombre": "coca",
+    "descripcion": "xghdjfjf",
+    "precio": "",
+    "imagen": "img/1787874780591_img_4432.jpg",
+    "categoria": "Empanada"
   }
 ]
