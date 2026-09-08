@@ -22,5 +22,13 @@
     "precio": "90000",
     "imagen": "img/1788898057784_chocolates.png",
     "categoria": "golocina"
+  },
+  {
+    "id": "prod0004",
+    "nombre": "jugetes",
+    "descripcion": "juegetes",
+    "precio": "22222",
+    "imagen": "img/1788898214469_juguetes.png",
+    "categoria": "jugetes"
   }
 ]
