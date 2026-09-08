@@ -6,5 +6,21 @@
     "precio": "3000",
     "imagen": "img/1788897346096_facturas.png",
     "categoria": "panadería"
+  },
+  {
+    "id": "prod0002",
+    "nombre": "Coca-cola Retornable",
+    "descripcion": "caca,sprite, fanta",
+    "precio": "3500",
+    "imagen": "img/1788897872984_gaseosa_cocacola_retornable_2l_x1_scaled.jpg",
+    "categoria": "bebidas"
+  },
+  {
+    "id": "prod0003",
+    "nombre": "golocina",
+    "descripcion": "bonobon etc",
+    "precio": "90000",
+    "imagen": "img/1788898057784_chocolates.png",
+    "categoria": "golocina"
   }
 ]
