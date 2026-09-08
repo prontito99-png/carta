@@ -1,2 +1,10 @@
 [
+  {
+    "id": "prod0001",
+    "nombre": "factura",
+    "descripcion": "por docena $... mledia....panaderia",
+    "precio": "3000",
+    "imagen": "img/1788897346096_facturas.png",
+    "categoria": "panadería"
+  }
 ]
