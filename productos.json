@@ -1,34 +1,34 @@
 [
   {
     "id": "prod0001",
-    "nombre": "factura",
-    "descripcion": "por docena $... mledia....panaderia",
-    "precio": "3000",
+    "nombre": "Facturas",
+    "descripcion": "Facturas de Panadería La Aurora",
+    "precio": "12000",
     "imagen": "img/1788897346096_facturas.png",
-    "categoria": "panadería"
+    "categoria": "Panadería"
   },
   {
     "id": "prod0002",
     "nombre": "Coca-cola Retornable",
-    "descripcion": "caca,sprite, fanta",
+    "descripcion": "Coca, Sprite, Fanta",
     "precio": "3500",
     "imagen": "img/1788897872984_gaseosa_cocacola_retornable_2l_x1_scaled.jpg",
-    "categoria": "bebidas"
+    "categoria": "Bebidas"
   },
   {
     "id": "prod0003",
-    "nombre": "golocina",
-    "descripcion": "bonobon etc",
-    "precio": "90000",
+    "nombre": "Chocolate Cofler",
+    "descripcion": "Cofler Air 55 grs",
+    "precio": "5000",
     "imagen": "img/1788898057784_chocolates.png",
-    "categoria": "golocina"
+    "categoria": "Golosinas/Kiosco"
   },
   {
     "id": "prod0004",
-    "nombre": "jugetes",
-    "descripcion": "juegetes",
-    "precio": "22222",
+    "nombre": "Mordillo",
+    "descripcion": "Llavero Mordillo Duravit",
+    "precio": "4000",
     "imagen": "img/1788898214469_juguetes.png",
-    "categoria": "jugetes"
+    "categoria": "Juguetes/Regalería"
   }
 ]
