@@ -24,8 +24,8 @@
             --card-bg: #ffffff;
             --text-main: #0f172a;
             --text-muted: #64748b;
-            --wa-green: #25d366;
-            --wa-green-hover: #1fb855;
+            --wa-green: #024c1d;
+            --wa-green-hover: #245d38;
             --danger-color: #ef4444;
             --border-color: #e2e8f0;
             --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.06);
@@ -220,22 +220,49 @@
             background: var(--primary-light);
         }
 
-        /* ================= CATEGORÍAS ================= */
+        /* ================= CATEGORÍAS (STICKY / FIJAS) ================= */
         .categories-wrapper {
-            max-width: 1000px;
-            margin: 0 auto 22px auto;
-            position: relative;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            background: rgba(253, 251, 247, 0.95);
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
+            padding: 10px 0;
+            margin: 0 -14px 20px -14px;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05);
         }
 
         .categories {
             display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
+            flex-wrap: nowrap;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+            scrollbar-width: none;
+            justify-content: flex-start;
             gap: 8px;
-            padding: 4px 2px;
+            padding: 2px 14px;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .categories::-webkit-scrollbar {
+            display: none;
+        }
+
+        @media (min-width: 768px) {
+            .categories {
+                justify-content: center;
+                flex-wrap: wrap;
+                overflow-x: visible;
+                padding: 2px 20px;
+            }
         }
 
         .categories button {
+            flex-shrink: 0;
+            white-space: nowrap;
             padding: 8px 18px;
             background: #ffffff;
             color: var(--text-muted);
@@ -247,7 +274,6 @@
             font-weight: 600;
             transition: all 0.2s ease;
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.03);
-            white-space: nowrap;
         }
 
         .categories button:hover {
@@ -1107,30 +1133,18 @@
                 padding: 0 10px;
             }
 
-            /* Scroll horizontal táctil de categorías en móviles */
+            /* Categories Sticky en Móviles */
+            .categories-wrapper {
+                margin: 0 -10px 16px -10px;
+                padding: 8px 0;
+            }
+
             .categories {
-                display: flex;
-                flex-wrap: nowrap;
-                overflow-x: auto;
-                -webkit-overflow-scrolling: touch;
-                scroll-snap-type: x mandatory;
-                justify-content: flex-start;
-                padding: 4px 2px 8px 2px;
+                padding: 2px 10px;
                 gap: 6px;
             }
 
-            .categories::-webkit-scrollbar {
-                height: 3px;
-            }
-
-            .categories::-webkit-scrollbar-thumb {
-                background: rgba(245, 158, 11, 0.4);
-                border-radius: 4px;
-            }
-
             .categories button {
-                flex-shrink: 0;
-                scroll-snap-align: start;
                 padding: 6px 14px;
                 font-size: 0.82rem;
             }
@@ -1294,21 +1308,17 @@
     <!-- HEADER / LOGO DE PRON TITO -->
     <header>
         <div class="banner-img-container">
-            <img src="img/prontito.jpeg" alt="Pron Tito" class="banner-img"
-            <img src="img/Gemini_Generated_Image_aw0gfaw0gfaw0gfa.jpg" alt="Pron Tito" class="banner-img"
-                onerror="this.onerror=null; this.src='prontito.jpeg';">
+            <img src="img/prontito.jpeg" alt="Pron Tito" class="banner-img" onerror="this.onerror=null; this.src='prontito.jpeg';">
         </div>
     </header>
 
     <div class="main-container">
         <div class="banner">¡Bienvenidos a Pron Tito!</div>
-        <div class="banner">¡Bienvenidos a La Josefina!</div>
 
         <!-- INFO / WHATSAPP BADGE -->
         <div class="info-contact-section">
             <div class="info-badge">
                 <span>📲 Pedidos WhatsApp: <b id="displayPhone">+54 9 11 2314-0119</b></span>
-                <span>📲 Pedidos WhatsApp: <b id="displayPhone">+54 9 11 2185-2095</b></span>
             </div>
             <div class="info-tagline">
                 <span>🍕 Pizzas • 🥟 Empanadas • 🥪 Sándwiches • 🍟 Minutas</span>
@@ -1322,7 +1332,7 @@
             <button id="btnVoice" title="Buscar por voz">🎤</button>
         </div>
 
-        <!-- BOTONES DE CATEGORIAS -->
+        <!-- BOTONES DE CATEGORIAS (STICKY) -->
         <div class="categories-wrapper">
             <div class="categories" id="category-buttons"></div>
         </div>
@@ -1341,9 +1351,6 @@
             nombreNegocio: "Pron Tito",
             telefonoWhatsApp: "5491123140119",
             telefonoFormateado: "+54 9 11 2314-0119",
-            nombreNegocio: "La Josefina",
-            telefonoWhatsApp: "5491121852095",
-            telefonoFormateado: "+54 9 11 2185-2095",
             githubUser: "prontito99-png",
             githubRepo: "carta",
             githubBranch: "main"
@@ -1468,6 +1475,16 @@
             }).join('');
         }
 
+        function scrollToProducts() {
+            const pl = document.getElementById('product-list');
+            const wrapper = document.querySelector('.categories-wrapper');
+            const offset = (wrapper ? wrapper.offsetHeight : 60) + 15;
+            if (pl) {
+                const targetY = pl.getBoundingClientRect().top + window.pageYOffset - offset;
+                window.scrollTo({ top: Math.max(0, targetY), behavior: "smooth" });
+            }
+        }
+
         function renderCategories() {
             const rawCats = productos.map(p => p.categoria).filter(Boolean);
             const cleanCats = [...new Set(rawCats)];
@@ -1476,17 +1493,19 @@
             if (!cont) return;
 
             cont.innerHTML = categorias.map((cat, idx) => `
-                <button class="${idx === 0 ? 'active-cat' : ''}" onclick="filtrarCat('${cat}', this)">${cat}</button>
+                <button class="${idx === 0 ? 'active-cat' : ''}" onclick="filtrarCat('${cat.replace(/'/g, "\\'")}', this)">${cat}</button>
             `).join('');
         }
 
         window.filtrarCat = function (cat, btn) {
             document.querySelectorAll("#category-buttons button").forEach(b => b.classList.remove("active-cat"));
-            if (btn) btn.classList.add("active-cat");
-            const filtrados = cat === "Todos" ? productos : productos.filter(p => p.categoria === cat);
+            if (btn) {
+                btn.classList.add("active-cat");
+                btn.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+            }
+            const filtrados = cat === "Todos" ? productos : productos.filter(p => p.categoria.toLowerCase() === cat.toLowerCase());
             render(filtrados);
-            const pl = document.getElementById('product-list');
-            if (pl) window.scrollTo({ top: pl.offsetTop - 80, behavior: "smooth" });
+            scrollToProducts();
         };
 
         /**********************************************************
@@ -1518,7 +1537,7 @@
             } else {
                 const activeBtn = document.querySelector('#category-buttons button.active-cat');
                 const cat = activeBtn ? activeBtn.textContent : 'Todos';
-                const filtrados = cat === "Todos" ? productos : productos.filter(p => p.categoria === cat);
+                const filtrados = cat === "Todos" ? productos : productos.filter(p => p.categoria.toLowerCase() === cat.toLowerCase());
                 render(filtrados);
             }
 
@@ -1661,9 +1680,9 @@
 
             texto += `--------------------------------\n`;
             texto += `*TOTAL:* $${totalPrice.toLocaleString('es-AR')}\n`;
-            texto += `*Modalidad:* ${tipoEntrega === 'delivery' ? 'Delivery (Envio a Domicilio)' : 'Retiro en Local'}\n`;
+            texto += `*Modalidad:* ${tipoEntrega === 'delivery' ? 'Delivery (Envío a Domicilio)' : 'Retiro en Local'}\n`;
             if (nombre) texto += `*Cliente:* ${nombre}\n`;
-            if (tipoEntrega === 'delivery' && direccion) texto += `*Direccion:* ${direccion}\n`;
+            if (tipoEntrega === 'delivery' && direccion) texto += `*Dirección:* ${direccion}\n`;
             if (pago) texto += `*Medio de Pago:* ${pago}\n`;
             if (notas) texto += `*Aclaraciones:* ${notas}\n`;
             texto += `--------------------------------\n`;
@@ -1740,7 +1759,7 @@
             if (!q) {
                 const activeBtn = document.querySelector('#category-buttons button.active-cat');
                 const cat = activeBtn ? activeBtn.textContent : 'Todos';
-                const filtrados = cat === "Todos" ? productos : productos.filter(p => p.categoria === cat);
+                const filtrados = cat === "Todos" ? productos : productos.filter(p => p.categoria.toLowerCase() === cat.toLowerCase());
                 render(filtrados);
                 return;
             }
@@ -1756,16 +1775,14 @@
         searchInput.addEventListener('input', filterProducts);
         btnBuscar.addEventListener('click', () => {
             filterProducts();
-            const pl = document.getElementById('product-list');
-            if (pl) window.scrollTo({ top: pl.offsetTop - 80, behavior: "smooth" });
+            scrollToProducts();
         });
 
         searchInput.addEventListener('keydown', (e) => {
             if (e.key === 'Enter') {
                 e.preventDefault();
                 filterProducts();
-                const pl = document.getElementById('product-list');
-                if (pl) window.scrollTo({ top: pl.offsetTop - 80, behavior: "smooth" });
+                scrollToProducts();
             }
         });
 
@@ -1791,8 +1808,7 @@
                 const text = event.results[0][0].transcript;
                 searchInput.value = text;
                 filterProducts();
-                const pl = document.getElementById('product-list');
-                if (pl) window.scrollTo({ top: pl.offsetTop - 80, behavior: "smooth" });
+                scrollToProducts();
             };
 
             btnVoice.onclick = () => { recognition.start(); };
